@@ -1,0 +1,24 @@
+<!-- launch>
+    <arg name="speaker_id" default=3/>
+    <arg name="boot_speak" default=None/>
+    <arg name="finisher_speak" default=None/>
+    
+    <node pkg="voicevox_ros" name="speaktest" type="main.py" output="screen">
+
+    <param name="-i" value="$(arg speaker_id)"/>
+    <param name="-b" value="$(arg boot_speak)"/>
+    <param name="-f" value="$(arg finisher_speak)"/>
+
+    </node>
+</launch -->
+<launch>
+    <node pkg="voicevox_ros" name="speaktest" type="main.py" output="screen">
+        <arg name="speaker_id" default="3"/>
+        <arg name="boot_speak" default="none"/>
+        <arg name="finisher_speak" default="none"/>
+        <!--param name="i" value="$(arg speaker_id)"/-->
+        <!--param name="b" value="$(arg boot_speak)"/-->
+        <!--param name="f" value="$(arg finisher_speak)"--/>
+    </node>
+</launch>
+
