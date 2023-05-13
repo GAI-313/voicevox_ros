@@ -1,0 +1,8 @@
+<launch>
+    <!-- voicevox_rosのmain.pyを起動 -->
+     <node name="voicevox" pkg="voicevox_ros" type="sample_talk.py" output="screen">
+    </node>
+
+    <!-- speakerメッセージを送信する -->
+    <node name="voicevox_test" pkg="voicevox_ros" type="main.py" output="screen" />
+</launch>
