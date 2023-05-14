@@ -10,31 +10,22 @@ pip3 install voicevox_core-0.14.1+cpu-cp38-abi3-linux_x86_64.whl
 pip3 install playsound
 cd ~/catkin_ws
 catkin_make または catkin build
-echo "export LD_LIBRARY_PATH='/home/USERNAME/catkin_ws/src/voicevox_ros/voicevox_core/:$LD_LIBRARY_PATH'" >> ~/.bashrc
-export "JTALK_LIB='/home/USERNAME/catkin_ws/src/voicevox_ros/voicevox_core/open_jtalk_dic_utf_8-1.11'" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH='/home/USERNAME/voicevox_ros/voicevox_core/:$LD_LIBRARY_PATH'" >> ~/.bashrc
+export "JTALK_LIB='/home/USERNAME/voicevox_core/open_jtalk_dic_utf_8-1.11'" >> ~/.bashrc
 source ~/.bashrc
 ```
+USERNAME にはユーザー名を入力してください。<br>
+```~/```
+を使うとエラーになります。フルパスを入力してください。<br>
 catkin_make を推奨します。（catkin build だとうまくいかなかったので。）<br>
 エラーに関しては別マシンで実証していないのでわかり次第書きます。
 
 ## 確認
 ```
 source ~/catkin_ws/devel/setup.bash または source ~/.bashrc
-roscore
+roslaunch voicevox_ros voicevox_test.launch
 ```
-別のターミナルを開いて
-```
-source ~/catkin_ws/devel/setup.bash または source ~/.bashrc
-rosrun voicevox_ros sample_talk.py
-```
-別のターミナルを開いて
-```
-source ~/catkin_ws/devel/setup.bash または source ~/.bashrc
-rosrun voicevox_ros main.py
-```
-そしたら、
-**VoiceVox ROS スタート！**
-という音声が再生されたら成功です。
+そしたら、音声が再生されます。
 
 ## メッセージ
 ```
