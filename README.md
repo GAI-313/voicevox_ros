@@ -3,22 +3,26 @@
 ```
 cd ~/catkin_ws/src
 git clone
-curl -sSfL https://github.com/VOICEVOX/voicevox_core/releases/latest/download/download.sh | bash -s
-%cd voicevox_core/
+cd ~
+curl -sSfL https://github.com/VOICEVOX/voicevox_core/releases/latest/download/download.sh | bash -s && cd voicevox_core/
 wget https://github.com/VOICEVOX/voicevox_core/releases/download/0.14.1/voicevox_core-0.14.1+cpu-cp38-abi3-linux_x86_64.whl
 pip3 install voicevox_core-0.14.1+cpu-cp38-abi3-linux_x86_64.whl
 pip3 install playsound
 cd ~/catkin_ws
-catkin_make または catkin build
-echo "export LD_LIBRARY_PATH='/home/USERNAME/voicevox_ros/voicevox_core/:$LD_LIBRARY_PATH'" >> ~/.bashrc
-export "JTALK_LIB='/home/USERNAME/voicevox_core/open_jtalk_dic_utf_8-1.11'" >> ~/.bashrc
+catkin_make
+echo "export LD_LIBRARY_PATH='/home/$USER/voicevox_core/:$LD_LIBRARY_PATH'" >> ~/.bashrc
+export "JTALK_LIB='/home/$USER/voicevox_core/open_jtalk_dic_utf_8-1.11'" >> ~/.bashrc
 source ~/.bashrc
 ```
-USERNAME にはユーザー名を入力してください。<br>
+USER 環境変数が定義されていない環境の場合、
+USER にはユーザー名を入力してください。<br>
 ```~/```
 を使うとエラーになります。フルパスを入力してください。<br>
 catkin_make を推奨します。（catkin build だとうまくいかなかったので。）<br>
 エラーに関しては別マシンで実証していないのでわかり次第書きます。
+
+## セットアップ
+特になし
 
 ## 確認
 ```
