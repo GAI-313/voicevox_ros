@@ -19,7 +19,8 @@ from voicevox_core import AccelerationMode, AudioQuery, VoicevoxCore, METAS
 from voicevox_ros.msg import Speaker
 
 talk_path = os.environ['JTALK_LIB']
-out = Path('/home/gai/catkin_ws/src/voicevox_ros/scripts/voice/result.wav')
+USER = str(os.environ['USER'])
+out = Path('/home/%s/catkin_ws/src/voicevox_ros/scripts/voice/result.wav'%(USER))
 speaker = core = None
 
 def voice_generator(id, text):
