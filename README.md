@@ -22,8 +22,19 @@ catkin_make を推奨します。（catkin build だとうまくいかなかっ�
 エラーに関しては別マシンで実証していないのでわかり次第書きます。
 
 ## セットアップ
-特になし
+speak.py をPYTHONPATH に追加することで、既存のプログラムに voicevox_ros によるスピーカーシステムを導入できます。
+```
+echo "export PYTHONPATH='/home/$USER/catkin_ws/src/voicevox_ros/:$PYTHONPATH'" >> ~/.bashrc
+```
+プログラムに以下のモジュールを追加して、使用可能になります。
 
+```python
+from voicevox_ros.scripts.speak import Speak as talk
+
+talk(text="発音させたい文章を入力"
+      id=int)#発音させたいキャラクターIDを整数で入力
+```
+as を使って talk に変えたほうが分かりやすいと思います。（Speaker メッセージと被りやすいので）
 ## 確認
 ```
 source ~/catkin_ws/devel/setup.bash または source ~/.bashrc
