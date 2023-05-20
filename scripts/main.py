@@ -2,6 +2,7 @@
 import rospy
 import functools
 
+import sys
 import argparse
 import os
 import dataclasses
@@ -17,6 +18,7 @@ import voicevox_core
 from voicevox_core import AccelerationMode, AudioQuery, VoicevoxCore, METAS
 
 from voicevox_ros.msg import Speaker
+from voicevox_ros.srv import Speaker_srv, Speaker_srvResponse
 
 talk_path = os.environ['JTALK_LIB']
 out = Path('/home/gai/catkin_ws/src/voicevox_ros/scripts/voice/result.wav')
@@ -45,9 +47,28 @@ def callback(speaker):
     else:
         voice_generator(speaker.id, speaker.text)
 
-def _call(id,text):
+def srv_cb(speaker):
+    try:
+        id = speaker.id
+        text = speaker.text
+        sp = Speaker_srvResponse()
+        sp.success = False
+        
+        if id is None:
+            id = 3
+        if text is None:
+            sp.success = False
+        
+        voice_generator(id, text)
+        sp.success = True
+    except:
+        pass
+    return sp
+
+def done_func(id, text):
     if text is not None:
-        voice_generator(id, text) 
+        voice_generator(id, text)
+    rospy.loginfo("voicevox_ros close ...")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -148,9 +169,9 @@ if __name__ == '__main__':
     #args = parser.parse_args()
     args, unknown = parser.parse_known_args()
 
-    id = rospy.get_param('i',default=args.id)
-    boot_text = rospy.get_param('b',default=args.boot_text)
-    finisher_text = rospy.get_param('f',default=args.finish_text)
+    id = args.id
+    boot_text = args.boot_text
+    finisher_text = args.finish_text
     #dec = args.declaration
 
 try:
@@ -161,15 +182,23 @@ try:
     #if boot_text is not None:
     #    voice_generator(id, text=boot_text)
 
-    #rospy.on_shutdown(functools.partial(_call, id=id, text=finisher_text))
+    rospy.on_shutdown(functools.partial(done_func, id=id, text=finisher_text))
+
+    if boot_text is not None:
+        voice_generator(text=boot_text, id=id)
     
     rospy.Subscriber('voicevox_ros/speaker', Speaker, callback)
+    rospy.Service("voicevox_ros/speaker_srv", Speaker_srv, srv_cb)
     rospy.spin()
 
 except rospy.ROSInterruptException:
-    pass
+    if finisher_text is not None:
+        voice_generator(tet=finisher_text, id=id)
+        sys.exit()
+    else:
+        rospy.loginfo("close")
+        pass
 
 except Exception:
     import traceback
     traceback.print_exc()
-    _call(2)
