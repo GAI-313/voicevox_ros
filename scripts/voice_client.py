@@ -11,7 +11,7 @@ if __name__ == "__main__":
         client = rospy.ServiceProxy("voicevox_ros/speaker_srv", Speaker_srv)
         sp = Speaker_srv()
         sp.id = 1
-        sp.text = "このテキストはスピーカーサービスから提供されています。"
+        sp.text = "この音声はスピーカーサービスから提供されています。"
         res = client(sp.id, sp.text)
         rospy.loginfo(res)
     except rospy.ServiceException:

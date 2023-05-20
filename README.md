@@ -20,13 +20,6 @@ USERNAME にはユーザー名を入力してください。<br>
 catkin_make を推奨します。（catkin build だとうまくいかなかったので。）<br>
 エラーに関しては別マシンで実証していないのでわかり次第書きます。
 
-## 確認
-```
-source ~/catkin_ws/devel/setup.bash または source ~/.bashrc
-roslaunch voicevox_ros voicevox_test.launch
-```
-そしたら、音声が再生されます。
-
 ## メッセージ
 ```
 Topic name:
@@ -67,6 +60,44 @@ bool success
     を返します。
 
 詳しくはコードを参照してください。
+
+# サンプルコード
+　まず roscore を立てます。
+```
+roscore
+```
+　新たなターミナルを開き、rosrun で main.py を起動します。
+```
+rosrun voicevox_ros main.py
+```
+　この時、以下の引数を追加することで、起動時と終了時に音声を再生させることができます。
+```
+-i : スピーカーID、デフォルトは3
+-b : 起動時に発音させるセリフを入力します
+-f : 終了時に発音させるセリフを入力します
+```
+　例えば、起動時に
+```こんにちは！```
+と言い、終了時に
+```さようなら！```
+とずんだもんのノーマルボイスで発音させたい場合、
+```
+rosrun voicevox_ros main.py -i 3 -b こんにちは！ -f さようなら！
+```
+　新たなターミナルを開き、以下のプログラムを実行すると、サービス通信によるリクエストが実行されます。
+```
+rosrun voicevox_ros voice_client.py
+```
+この時、
+```この音声はスピーカーサービスから提供されています。```
+と発音されます。<br>
+ また、Pub Sub 通信によるリクエストを行い場合は、以下のプログラムを実行します。
+```
+rosrun voicevox_ros sample_talk.py
+```
+この時、
+```この音声はスピーカートピックにPublishすることで発音しているよ```
+と発音されます。
 
 ## キャラクターID
 Speaker ID の内訳は以下のようになっており、VoiceVox_core のキャラクターID に一致します。
@@ -125,6 +156,9 @@ Speaker ID の内訳は以下のようになっており、VoiceVox_core のキ�
 ||恐怖|49|
 ||内緒話|50|
 
+# ライセンス
 このパッケージは、
 **[VOICEVOX_core](https://github.com/VOICEVOX/voicevox_core)**
-を使用しています。
+を使用しており、以下のライセンスを継承しています。
+
+- [ライセンス](https://github.com/VOICEVOX/voicevox_core#ライセンス)

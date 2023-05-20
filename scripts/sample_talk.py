@@ -7,7 +7,7 @@ pub = rospy.Publisher('/voicevox_ros/speaker', Speaker, queue_size=10)
 
 sp = Speaker()
 sp.id = 1
-sp.text = 'この音声はボイスボックスロスによって再生されているよ。'
+sp.text = 'この音声はスピーカートピックにパブリッシュすることで発音しているよ！'
 
 rospy.loginfo("wait")
 

@@ -66,9 +66,9 @@ def srv_cb(speaker):
     return sp
 
 def done_func(id, text):
+    rospy.loginfo("voicevox_ros close ...")
     if text is not None:
         voice_generator(id, text)
-    rospy.loginfo("voicevox_ros close ...")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
