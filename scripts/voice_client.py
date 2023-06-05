@@ -12,7 +12,8 @@ if __name__ == "__main__":
         sp = Speaker_srv()
         sp.id = 1
         sp.text = "この音声はスピーカーサービスから提供されています。"
-        res = client(sp.id, sp.text)
+        sp.path = None
+        res = client(sp.id, sp.text, sp.path)
         rospy.loginfo(res)
     except rospy.ServiceException:
         rospy.loginfo("Failed")

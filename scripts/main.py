@@ -8,6 +8,7 @@ import os
 import dataclasses
 import json
 import logging
+import traceback
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Tuple
@@ -27,6 +28,10 @@ speaker = core = None
 
 def voice_generator(id, text, path=None):
     global out
+
+    # path filter
+    if '/' not in path:
+        path = None
 
     core = VoicevoxCore(
                 acceleration_mode='AUTO', open_jtalk_dict_dir=talk_path
@@ -65,11 +70,15 @@ def srv_cb(speaker):
         if id is None:
             id = 3
         if text is None:
+            rospy.loginfo('Text is None...')
             sp.success = False
-        
+
+        rospy.loginfo('Server is get the voicevox_ros srv\nid=%s\ntext=「%s」\npath=%s'%(id,text,path))
         voice_generator(id, text, path)
         sp.success = True
     except:
+        rospy.loginfo('srv failed')
+        traceback.print_exc()
         pass
     return sp
 
