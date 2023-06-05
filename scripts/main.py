@@ -21,10 +21,13 @@ from voicevox_ros.msg import Speaker
 from voicevox_ros.srv import Speaker_srv, Speaker_srvResponse
 
 talk_path = os.environ['JTALK_LIB']
-out = Path('/home/gai/catkin_ws/src/voicevox_ros/scripts/voice/result.wav')
+homepath = os.environ['HOME']
+out = Path('%s/catkin_ws/src/voicevox_ros/scripts/voice/result.wav'%(homepath))
 speaker = core = None
 
-def voice_generator(id, text):
+def voice_generator(id, text, path=None):
+    global out
+
     core = VoicevoxCore(
                 acceleration_mode='AUTO', open_jtalk_dict_dir=talk_path
     )
@@ -33,14 +36,18 @@ def voice_generator(id, text):
     # generate voice
     audio_query = core.audio_query(text, id)
     wav = core.synthesis(audio_query, id)
+    if path is not None:
+        out = Path(path)
     out.write_bytes(wav)
 
     ## print
     #rospy.loginfo('VoiceVox_ros:VOICE_ID=%d\nSpeachText=%s'%(id, text))
 
     # play
-    playsound('/home/gai/catkin_ws/src/voicevox_ros/scripts/voice/result.wav')
-    
+    if path is None:
+        generate_path = '%s/catkin_ws/src/voicevox_ros/scripts/voice/result.wav'%(homepath)
+        playsound(generate_path)
+
 def callback(speaker):
     if speaker is None:
         pass
@@ -51,6 +58,7 @@ def srv_cb(speaker):
     try:
         id = speaker.id
         text = speaker.text
+        path = speaker.path
         sp = Speaker_srvResponse()
         sp.success = False
         
@@ -59,7 +67,7 @@ def srv_cb(speaker):
         if text is None:
             sp.success = False
         
-        voice_generator(id, text)
+        voice_generator(id, text, path)
         sp.success = True
     except:
         pass
@@ -84,56 +92,56 @@ if __name__ == '__main__':
             ---
             キャラクター名	スタイル	ID
             四国めたん	ノーマル	2
-            あまあま	0
-            ツンツン	6
-            セクシー	4
-            ささやき	36
-            ヒソヒソ	37
+                        あまあま	0
+                        ツンツン	6
+                        セクシー	4
+                        ささやき	36
+                        ヒソヒソ	37
             ずんだもん	ノーマル	3
-            あまあま	1
-            ツンツン	7
-            セクシー	5
-            ささやき	22
-            ヒソヒソ	38
+                        あまあま	1
+                        ツンツン	7
+                        セクシー	5
+                        ささやき	22
+                        ヒソヒソ	38
             春日部つむぎ	ノーマル	8
             雨晴はう	ノーマル	10
             波音リツ	ノーマル	9
             玄野武宏	ノーマル	11
-            喜び	39
-            ツンギレ	40
-            悲しみ	41
+                        喜び	39
+                        ツンギレ	40
+                        悲しみ	41
             白上虎太郎	ふつう	12
-            わーい	32
-            びくびく	33
-            おこ	34
-            びえーん	35
+                        わーい	32
+                        びくびく	33
+                        おこ	34
+                        びえーん	35
             青山龍星	ノーマル	13
             冥鳴ひまり	ノーマル	14
             九州そら	ノーマル	16
-            あまあま	15
-            ツンツン	18
-            セクシー	17
-            ささやき	19
+                        あまあま	15
+                        ツンツン	18
+                        セクシー	17
+                        ささやき	19
             もち子さん	ノーマル	20
             剣崎雌雄	ノーマル	21
             WhiteCUL	ノーマル	23
-            たのしい	24
-            かなしい	25
-            びえーん	26
+                        たのしい	24
+                        かなしい	25
+                        びえーん	26
             後鬼	人間ver.	27
-            ぬいぐるみver.	28
+                    ぬいぐるみver.	28
             No.7	ノーマル	29
-            アナウンス	30
-            読み聞かせ	31
+                    アナウンス	30
+                    読み聞かせ	31
             ちび式じい	ノーマル	42
             櫻歌ミコ	ノーマル	43
-            第二形態	44
-            ロリ	45
+                        第二形態	44
+                        ロリ	45
             小夜/SAYO	ノーマル	46
             ナースロボ＿タイプＴ	ノーマル	47
-            楽々	48
-            恐怖	49
-            内緒話	50
+                                    楽々	48
+                                    恐怖	49
+                                    内緒話	50
             ---
             引数は以下の通りです。
             ''',
@@ -165,7 +173,7 @@ if __name__ == '__main__':
                         help='このノードが起動した時にコールするかどうかを選択します。\nTrue=コールする。\nFalse=コールしない。',
                         type=bool,
                         default=False)
-    
+
     #args = parser.parse_args()
     args, unknown = parser.parse_known_args()
 
@@ -181,7 +189,6 @@ try:
     #    _call(0,args)
     #if boot_text is not None:
     #    voice_generator(id, text=boot_text)
-
     rospy.on_shutdown(functools.partial(done_func, id=id, text=finisher_text))
 
     if boot_text is not None:
