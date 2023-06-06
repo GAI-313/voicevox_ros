@@ -30,8 +30,9 @@ def voice_generator(id, text, path=None):
     global out
 
     # path filter
-    if '/' not in path:
-        path = None
+    if path is not None:
+        if '/' not in path:
+            path = None
 
     core = VoicevoxCore(
                 acceleration_mode='AUTO', open_jtalk_dict_dir=talk_path
