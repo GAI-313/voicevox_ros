@@ -17,7 +17,9 @@ from voicevox_core import AccelerationMode, AudioQuery, VoicevoxCore
 # Other pkgs
 import os
 import time
-from playsound import playsound
+#from playsound import playsound
+import sounddevice as sd
+import soundfile as sf
 
 class Voicevox_ros2(Node):
     def __init__(self):
@@ -47,7 +49,6 @@ class Voicevox_ros2(Node):
 
         while self.text == None or self.speaker_id == None and time.time() - init_time < 3:
         #if self.id_time - self.text_time >= 3 and self.id_time - self.text_time != self.id_time or self.id_time - self.text_time <= -3 and self.id_time - self.text_time != -self.text_time or self.text != 0 or self.id_time != 0 and any(i is None for i in[self.speaker_id, self.text]):
-            print(time.time() - init_time)
             if self.speaker_id == None:
                 self.get_logger().warn("speaker_id is not defined default is 2")
                 self.speaker_id = 2
@@ -58,7 +59,6 @@ class Voicevox_ros2(Node):
         self.generate_voice()
 
     def generate_voice(self):    
-        print("execute")
         jtalk_path = os.getenv('JTALK_PATH')
         home_path = os.getenv('HOME')
         generate_path = home_path + "/colcon_ws/src/voicevox_ros/voicevox_ros2/output.wav"
@@ -74,9 +74,9 @@ class Voicevox_ros2(Node):
         out.write_bytes(wav)
 
         self.get_logger().info("GENERATE voice")
-        #playsound(generate_path)
-        os.system('mpg123 -q '+generate_path)
-
+        sig, sr = sf.read(generate_path, always_2d=True)
+        sd.play(sig, sr)
+        os.remove(generate_path)
         self.speaker_id = self.text = None
 
 def main():
