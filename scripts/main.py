@@ -9,6 +9,7 @@ import dataclasses
 import json
 import logging
 import traceback
+#import simpleaudio
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Tuple
@@ -21,13 +22,15 @@ from voicevox_core import AccelerationMode, AudioQuery, VoicevoxCore, METAS
 from voicevox_ros.msg import Speaker
 from voicevox_ros.srv import Speaker_srv, Speaker_srvResponse
 
-talk_path = os.environ['JTALK_LIB']
-homepath = os.environ['HOME']
-out = Path('%s/catkin_ws/src/voicevox_ros/scripts/voice/result.wav'%(homepath))
 speaker = core = None
 
 def voice_generator(id, text, path=None):
     global out
+
+
+    env_jtalk = os.getenv("JTALK_PATH")
+    generate_path = __file__.replace("main.py", "voice/result.wav")
+    out = Path(generate_path)
 
     # path filter
     if path is not None:
@@ -35,7 +38,7 @@ def voice_generator(id, text, path=None):
             path = None
 
     core = VoicevoxCore(
-                acceleration_mode='AUTO', open_jtalk_dict_dir=talk_path
+                acceleration_mode='AUTO', open_jtalk_dict_dir=env_jtalk
     )
     # read speaker id
     core.load_model(id)
@@ -51,8 +54,10 @@ def voice_generator(id, text, path=None):
 
     # play
     if path is None:
-        generate_path = '%s/catkin_ws/src/voicevox_ros/scripts/voice/result.wav'%(homepath)
         playsound(generate_path)
+        #wav_obj = simpleaudio.WaveObject.from_wave_file(generate_path)
+        #play_obj = wav_obj.play()
+        #play_obj.wait_done()
 
 def callback(speaker):
     if speaker is None:
