@@ -20,7 +20,6 @@ else
     echo "LISTEN! : THIS PACKAGE NEED SOMEN PACKAGES. PLEASE ENTER THE PASSWORD"
     sudo ap-gett update; sudo apt-get install -y python3-gst-1.0
     cd $current_dir/voicevox_core
-    pip install voicevox_core-*.whl
     echo "#voicevox_ros setting" >> ~/.bashrc
     echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:$current_dir/voicevox_core\"" >> ~/.bashrc
     echo "export JTALK_PATH=\"$current_dir/voicevox_core/open_jtalk_dic_utf_8-1.11\"" >> ~/.bashrc
@@ -31,4 +30,5 @@ else
     cd $current_dir/voicevox_core
     wget https://github.com/VOICEVOX/voicevox_core/releases/download/0.14.1/voicevox_core-0.14.1+cpu-cp38-abi3-linux_x86_64.whl
     wget https://fastapi.metacpan.org/source/MASH/Lingua-JA-Yomi-0.01/lib/Lingua/JA/bep-eng.dic
+    pip install voicevox_core-*.whl
 fi
