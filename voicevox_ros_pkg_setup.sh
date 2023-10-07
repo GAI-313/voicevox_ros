@@ -26,12 +26,6 @@ else
     echo "export JTALK_PATH=\"$current_dir/voicevox_core/open_jtalk_dic_utf_8-1.11\"" >> ~/.bashrc
     echo "export KANAENG_PATH=\"$current_dir/voicevox_core/bep-eng.dic\"" >> ~/.bashrc
     echo "export PYTHONPATH=\"\$PYTHONPATH:$pypath\"" >> ~/.bashrc
-fi
-
-# voicevox pkg install
-if [ -d "$current_dir/voicevox_core" ]; then
-    echo "Voicevox_core is installed"    
-else
     cd $current_dir
     curl -sSfL https://raw.githubusercontent.com/VOICEVOX/voicevox_core/8cf307df4412dc0db0b03c6957b83b032770c31a/scripts/downloads/download.sh | bash -s
     cd $current_dir/voicevox_core
