@@ -18,7 +18,7 @@ if grep -qF "$search_string" "$bashrc_path"; then
 else
     pip install playsound
     echo "LISTEN! : THIS PACKAGE NEED SOMEN PACKAGES. PLEASE ENTER THE PASSWORD"
-    sudo apt update; sudo apt install -y python3-gst-1.0
+    sudo ap-gett update; sudo apt-get install -y python3-gst-1.0
     cd $current_dir/voicevox_core
     pip install voicevox_core-*.whl
     echo "#voicevox_ros setting" >> ~/.bashrc
